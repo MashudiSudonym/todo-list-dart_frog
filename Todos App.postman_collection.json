@@ -1,0 +1,286 @@
+{
+	"info": {
+		"_postman_id": "6f8002ae-13af-4feb-89c8-4a220ea13885",
+		"name": "Todos App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1127149"
+	},
+	"item": [
+		{
+			"name": "Create Todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.collectionVariables.set(\"todoId\", data.id);\r",
+							"",
+							"pm.test('Response status code is 201', function () {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.test('Response has the required fields', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.title).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.description).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.isCompleted).to.exist.and.to.be.a('boolean');",
+							"})",
+							"",
+							"pm.test('The id should be a non-empty string', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, 'Value should not be empty');",
+							"})",
+							"",
+							"pm.test('isCompleted is a boolean value', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.isCompleted).to.be.a('boolean');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"Take out new again\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/todos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Todos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response is an array with at least one element\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array').and.to.have.lengthOf.at.least(1);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array').and.to.have.lengthOf.at.least(1, \"Array should not be empty\");",
+							"    ",
+							"    responseData.forEach(function(todo){",
+							"        pm.expect(todo.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should be a non-empty string\");",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Title is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function (item) {",
+							"        pm.expect(item.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Title should not be empty\");",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/todos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response status code is 200', function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"})",
+							"",
+							"pm.test('Response has required fields', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.title).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.description).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.isCompleted).to.exist.and.to.be.a('boolean');",
+							"})",
+							"",
+							"pm.test('Id is a non-empty string', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, 'Id should not be empty');",
+							"})",
+							"",
+							"pm.test('Title is a non-empty string', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, 'Title should not be empty');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/todos/{{todoId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"todos",
+						"{{todoId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Todo by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response status code is 200', function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"})",
+							"",
+							"pm.test('Id is a non-empty string', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, 'Value should not be empty');",
+							"})",
+							"",
+							"pm.test('Title is a non-empty string', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, 'Title should not be empty');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"Take out trash!\", \"isCompleted\": true}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/todos/{{todoId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"todos",
+						"{{todoId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Todo by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/todos/{{todoId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"todos",
+						"{{todoId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "todoId",
+			"value": "0",
+			"type": "string"
+		}
+	]
+}
