@@ -1,46 +1,18 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'todo.freezed.dart';
 part 'todo.g.dart';
 
-@immutable
-@JsonSerializable()
-class Todo extends Equatable {
-  Todo({
-    required this.title, this.id,
-    this.description = '',
-    this.isCompleted = false,
-  }) : assert(id == null || id.isNotEmpty, 'id cannot be empty');
+@freezed
+class Todo with _$Todo {
+  factory Todo({
+    required String? id,
+    required String title,
+    @Default('') String description,
+    @Default(false) bool isCompleted,
+  }) = _Todo;
 
-  final String? id;
-
-  final String title;
-
-  final String description;
-
-  final bool isCompleted;
-
-  Todo copyWith({
-    String? id,
-    String? title,
-    String? description,
-    bool? isCompleted,
-  }) {
-    return Todo(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      isCompleted: isCompleted ?? this.isCompleted,
-    );
-  }
-
-  static Todo fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TodoToJson(this);
-
-  @override
-  List<Object?> get props => [id, title, description, isCompleted];
+  factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
 }
